@@ -1,0 +1,69 @@
+#include<stdio.h>
+#include<windows.h>
+#include<conio.h>
+
+#define row 9
+#define col 11
+char map[row][col+1]={
+{"*#*********"},
+{"***###*###*"},
+{"###**#****#"},
+{"*#**###**#*"},
+{"***********"},
+{"#####*##*##"},
+{"**#*****#*E"},
+{"***#*###**#"},
+{"*#*********"},
+};
+
+void print_map()
+{
+	for(int i=0;i<row;i++)
+		puts(map[i]);
+}
+
+void show_cursor(int x,int y)
+{
+	COORD pos;
+	pos.X=x;
+	pos.Y=y;
+	printf("curX=%d,curY=%d\n",x,y);
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),pos);
+}
+
+int curX,curY;
+
+int succeed()
+{
+	if(map[curY][curX]=='E')
+	{
+		printf("恭喜成功逃离小岛\n");
+		exit(0); 
+	}
+}
+
+int main()
+{
+	while(1)
+	{
+		succeed();
+		print_map();
+		show_cursor(curX,curY);
+		
+		char t=getch();
+		system("cls");
+		switch(t)
+		{
+			case 'w':if((curY-1)>=0&&(map[curY-1][curX]=='*'||map[curY-1][curX]=='E'))
+							curY--;break;
+			case 's':if((curY+1)<row&&(map[curY+1][curX]=='*'||map[curY+1][curX]=='E'))
+							curY++;break;
+			case 'a':if((curX-1)>=0&&(map[curY][curX-1]=='*'||map[curY][curX-1]=='E'))
+							curX--;break;
+			case 'd':if((curX+1)<col&&(map[curY][curX+1]=='*'||map[curY][curX+1]=='E'))
+							curX++;break;
+			default :printf("很遗憾，你掉入海中了\n");exit(0);	
+		}
+	}
+	return 0;
+}
